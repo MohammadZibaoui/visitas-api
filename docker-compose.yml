@@ -1,0 +1,27 @@
+version: "3.8"
+services:
+  visitas-api:
+    build: .
+    container_name: visitas-api
+    ports:
+      - "8000:8000"
+    environment:
+      - VISITAS_DB=/data/visitas.db
+      - DISTANCE_SERVICE_URL=http://distance-service:5000
+    volumes:
+      - ./data:/data
+    depends_on:
+      - distance-service
+  distance-service:
+    image: distance-service:local
+    build:
+      context: ../distance-service
+    container_name: distance-service
+    ports:
+      - "5000:5000"
+  frontend:
+    build:
+      context: ../frontend
+    container_name: visita-frontend
+    ports:
+      - "3000:80"
