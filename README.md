@@ -21,3 +21,6 @@ CRUD de visitas, integração com ViaCEP (público, gratuito) para cálculo de d
 - `DELETE /visits/{id}` - remove visita
 - `GET /address/cep/{cep}` - consulta ViaCEP
 - `POST /visits/{id}/distance-check` - envia requisição ao distance-service
+
+<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/9e422694-ce40-4d52-8e76-7758b33bb600" />
+
