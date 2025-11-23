@@ -22,5 +22,6 @@ CRUD de visitas, integração com ViaCEP (público, gratuito) para cálculo de d
 - `GET /address/cep/{cep}` - consulta ViaCEP
 - `POST /visits/{id}/distance-check` - envia requisição ao distance-service
 
-<img width="1536" height="1024" alt="image" src="https://github.com/user-attachments/assets/9e422694-ce40-4d52-8e76-7758b33bb600" />
+<img width="548" height="380" alt="image" src="https://github.com/user-attachments/assets/24398ae1-b33f-4888-a930-39d3ee1e3be1" />
+
 
