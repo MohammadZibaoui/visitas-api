@@ -13,7 +13,6 @@ services:
     depends_on:
       - distance-service
   distance-service:
-    image: distance-service:local
     build:
       context: ../distance-service
     container_name: distance-service
@@ -25,4 +24,5 @@ services:
     container_name: visita-frontend
     ports:
       - "3000:80"
+
 
