@@ -18,10 +18,11 @@ services:
       context: ../distance-service
     container_name: distance-service
     ports:
-      - "5000:5000"
+      - "5050:5000"
   frontend:
     build:
       context: ../frontend
     container_name: visita-frontend
     ports:
       - "3000:80"
+
