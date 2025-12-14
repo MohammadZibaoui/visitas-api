@@ -12,7 +12,6 @@ services:
       - ./data:/data
     depends_on:
       - distance-service
-    restart: unless-stopped
     networks:
       - visitas-net
 
