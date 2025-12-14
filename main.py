@@ -1,13 +1,12 @@
 # main.py
+from fastapi import FastAPI, HTTPException, status, Path
+from pydantic import BaseModel, Field
+from typing import Optional, List
+from datetime import datetime
 import sqlite3
 import httpx
 import os
-from datetime import datetime
-from typing import Optional, List
-
-from fastapi import FastAPI, HTTPException, status, Path
-from pydantic import BaseModel, Field
-
+from fastapi.middleware.cors import CORSMiddleware
 
 # Configurações
 
@@ -30,6 +29,13 @@ Componentes:
 """,
 )
 
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["*"],  # ou apenas ["http://localhost:3000"]
+    allow_credentials=True,
+    allow_methods=["*"],
+    allow_headers=["*"],
+)
 # Tags do Swagger
 tags_metadata = [
     {"name": "Visitas", "description": "CRUD completo de visitas técnicas."},
@@ -148,19 +154,31 @@ async def create_visit(payload: VisitIn):
     summary="Listar visitas",
     description="Lista todas as visitas cadastradas com paginação."
 )
-async def list_visits(page: int = 1, size: int = 50, status: Optional[str] = None):
-
+async def list_visits(
+    page: int = 1,
+    size: int = 50,
+    status: Optional[str] = None
+):
+    page = max(page, 1)
+    size = min(max(size, 1), 100)
     offset = (page - 1) * size
+
     conn = get_conn()
     cur = conn.cursor()
 
+    base_query = """
+        SELECT * FROM visits
+        {where}
+        ORDER BY COALESCE(date, created_at) DESC
+        LIMIT ? OFFSET ?
+    """
+
     if status:
-        cur.execute(
-            "SELECT * FROM visits WHERE status = ? ORDER BY date LIMIT ? OFFSET ?",
-            (status, size, offset)
-        )
+        query = base_query.format(where="WHERE status = ?")
+        cur.execute(query, (status, size, offset))
     else:
-        cur.execute("SELECT * FROM visits ORDER BY date LIMIT ? OFFSET ?", (size, offset))
+        query = base_query.format(where="")
+        cur.execute(query, (size, offset))
 
     rows = cur.fetchall()
     conn.close()
@@ -310,5 +328,3 @@ async def distance_check(visit_id: int, payload: DistanceCheckRequest):
 )
 async def health():
     return {"status": "ok", "service": "visitas-api"}
-
-
